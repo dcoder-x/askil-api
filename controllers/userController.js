@@ -197,6 +197,16 @@ exports.getUser = (req, res) => {
 };
 
 // handle get request at "/api/users/user"
+exports.getUserProfile = (req, res) => {
+  User.findById(req.params.id)
+    .select("-password")
+    .then((user) => res.status(200).json({ user: user, message: "user found" }))
+    .catch((err) => {
+      res.status(500).json({ error: err, message: "user not found" });
+    });
+};
+
+// handle get request at "/api/users/user"
 exports.getUsers = (req, res) => {
   User.find()
     .select("-password")

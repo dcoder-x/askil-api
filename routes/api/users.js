@@ -58,6 +58,12 @@ router.get("/user", auth, users_controller.getUser);
 // @route   GET api/users/user
 // @desc    Get user data
 // @access  private
+router.get("/user_profile/:id", users_controller.getUserProfile);
+
+// users_validation.validateLogin,
+// @route   GET api/users/user
+// @desc    Get user data
+// @access  private
 router.post("/social", auth, users_controller.socialPlatforms);
 
 // users_validation.validateLogin,
