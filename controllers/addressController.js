@@ -13,18 +13,13 @@ exports.addAddress = (req, res, next) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     address1: req.body.address1,
-    address2: req.body.address2,
     country: req.body.country,
     countryCode: req.body.countryCode,
     state: req.body.state,
     city: req.body.city,
     street: req.body.street,
-    building: req.body.building,
-    floor: req.body.floor,
-    apartment: req.body.apartment,
     phoneNumber: req.body.phoneNumber,
     postalCode: req.body.postalCode,
-    isPrimary: false
   });
 
   newAddress

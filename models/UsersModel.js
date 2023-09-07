@@ -9,7 +9,7 @@ const addressSchema = new Schema({
   state: { type: String, required: true },
   city: { type: String, required: true },
   street: { type: String },
-  postalCode: { type: Number},
+  postalCode: { type: String},
 });
 
 const UserSchema = new Schema({
