@@ -9,7 +9,9 @@ require("dotenv").config();
 // our routes
 const usersRouter = require("./routes/api/users");
 const addressRouter = require("./routes/api/address");
+const webhookRouter = require("./routes/api/webhook");
 const bodyParser = require("body-parser");
+const { webhook } = require("./controllers/webhook");
 
 const app = express();
 
@@ -73,6 +75,7 @@ db.once("open", function (con) {
 
 // Set up our main routes
 app.use("/api/users", usersRouter);
+app.use("/api/webhook", webhook);
 app.use("/api/address", addressRouter);
 
 
