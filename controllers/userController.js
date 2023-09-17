@@ -209,7 +209,7 @@ exports.getUser = (req, res) => {
 
 // handle get request at "/api/users/user"
 exports.getUserProfile = (req, res) => {
-  User.findById(req.params.id)
+  User.findOne({user_id:req.params.id})
     .select("-password")
     .then((user) => res.status(200).json({ user: user, message: "user found" }))
     .catch((err) => {

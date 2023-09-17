@@ -13,6 +13,7 @@ const addressSchema = new Schema({
 });
 
 const UserSchema = new Schema({
+  user_id:String,
   username: { type: String, unique: true },
   password: { type: String,},
   firstName: { type: String },
