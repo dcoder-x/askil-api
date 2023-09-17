@@ -371,7 +371,7 @@ exports.deleteUserImage = function (req, res) {
   try {
     User.updateOne(
       { _id: id },
-      { $pull: { userImages: { id: mongoose.Types.ObjectId(imageId) } } }
+      { $pull: { userImages: { _id: mongoose.Types.ObjectId(imageId) } } }
     ).then((user) => {
       return res.status(201).json({ message: "Image(s) deleted sucessfully" });
     });

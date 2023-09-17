@@ -1,4 +1,5 @@
 const Users = require("../models/UsersModel");
+const mongoose = require("mongoose");
 
 
 
@@ -11,7 +12,7 @@ exports.webhook = async (req,res)=>{
 
     try {
         const user = new Users({
-           _id:id,
+           _id: mongoose.Types.ObjectId(id),
            order_email:email
           });
           user.save(user)
