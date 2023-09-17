@@ -23,7 +23,7 @@ exports.createUser = async (req, res) => {
 
 
     const orderEmailExists = User.findOne({order_email:orderEmailorId})
-    const idExists = User.findById(orderEmailorId)
+    const idExists = User.find({user_id:orderEmailorId})
 
     // if ( username || password ) this is wrong, it'll be true if any one of them is containing a value
     if (orderEmailExists||idExists) {
