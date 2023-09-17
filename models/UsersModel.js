@@ -13,17 +13,19 @@ const addressSchema = new Schema({
 });
 
 const UserSchema = new Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  username: { type: String, unique: true },
+  password: { type: String,},
   firstName: { type: String },
   lastName: { type: String },
   about: {type:String},
   phone: { type: String },
   workPhone: { type: String },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, unique: true },
   gender: { type: String },
   nationality: { type: String },
   avatar:{type:String},
+  resgistered:{type:Boolean,default:false},
+  order_email:String,
   userImages:[Object],
   job:{
     title:String,

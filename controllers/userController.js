@@ -16,68 +16,79 @@ function validateVariable(variable) {
 exports.createUser = async (req, res) => {
   try {
     // create a new user after validating and sanitzing
-    const { password, verifyPassword, username, email } = req.body;
+    const { password, verifyPassword, username, email,orderEmailorId } = req.body;
+
 
     console.log("register request", req.body, username);
 
+
+    const orderEmailExists = User.findOne({order_email:orderEmailorId})
+    const idExists = User.findById(orderEmailorId)
+
     // if ( username || password ) this is wrong, it'll be true if any one of them is containing a value
-    if (
-      validateVariable(username) &&
-      validateVariable(password) &&
-      validateVariable(email)
-    ) {
-      const usernameExist = await User.findOne({ username: username });
-      const emailExist = await User.findOne({ email });
-
-      console.log(usernameExist, emailExist, "love");
-
-      if (usernameExist) {
-        res.status(400).json({
-          message: `username already exists ${username}`,
-          usernameExist,
-        });
-      } else if (emailExist) {
-        res
-          .status(400)
-          .json({ message: `email already exists ${email}`, emailExist });
-      } else {
-        if (password == verifyPassword) {
-          const salt = await bcrypt.genSalt();
-          const hashedPassword = await bcrypt.hash(password, salt);
-          const user = new User({
-            password: hashedPassword,
-            username: username,
-            email: email,
+    if (orderEmailExists||idExists) {
+      if (
+        validateVariable(username) &&
+        validateVariable(password) &&
+        validateVariable(email)
+      ) {
+        const usernameExist = await User.findOne({ username: username });
+        const emailExist = await User.findOne({ email });
+  
+        console.log(usernameExist, emailExist, "love");
+  
+        if (usernameExist) {
+          res.status(400).json({
+            message: `username already exists ${username}`,
+            usernameExist,
           });
-          try {
-            const id = user._id;
-            const username = user.userName;
-            console.log("saved");
-            const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
-              expiresIn: "30m",
-            });
-            console.log("token ");
-            user.save(user);
-
-            // sendVerificationEmail(email, token);
-            return res
-              .status(201)
-              .json({ message: "user registered sucessfully", id: user._id });
-          } catch (error) {
-            console.log(error);
-            return res
-              .status(400)
-              .json({ message: "user could not be registered", error: error });
-          }
+        } else if (emailExist) {
+          res
+            .status(400)
+            .json({ message: `email already exists ${email}`, emailExist });
         } else {
-          res.status(401).json({
-            message: "password and confirm password field don't match",
-          });
+          if (password == verifyPassword) {
+            const salt = await bcrypt.genSalt();
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const user = new User({
+              password: hashedPassword,
+              username: username,
+              email: email,
+              resgistered:true
+            });
+            try {
+              const id = user._id;
+              const username = user.userName;
+              console.log("saved");
+              const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+                expiresIn: "30m",
+              });
+              console.log("token ");
+              user.save(user);
+  
+              // sendVerificationEmail(email, token);
+              return res
+                .status(201)
+                .json({ message: "user registered sucessfully", id: user._id });
+            } catch (error) {
+              console.log(error);
+              return res
+                .status(400)
+                .json({ message: "user could not be registered", error: error });
+            }
+          } else {
+            res.status(401).json({
+              message: "password and confirm password field don't match",
+            });
+          }
         }
+      } else {
+        res.status(400).json({ message: "fill in required fields" });
       }
     } else {
-      res.status(400).json({ message: "fill in required fields" });
+      res.status(400).json({ message: "Card order credentials are incorrect" });
     }
+
   } catch (error) {
     res.status(500).json({ message: "something went wrong" });
   }
