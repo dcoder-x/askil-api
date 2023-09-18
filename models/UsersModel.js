@@ -14,7 +14,7 @@ const addressSchema = new Schema({
 
 const UserSchema = new Schema({
   user_id:String,
-  username: { type: String, unique: true },
+  username: { type: String, unique: true,default:`${String(Math.random()* Date.now())}` },
   password: { type: String,},
   firstName: { type: String },
   lastName: { type: String },
