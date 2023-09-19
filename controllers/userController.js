@@ -52,7 +52,7 @@ exports.createUser = async (req, res) => {
             const hashedPassword = await bcrypt.hash(password, salt);
 
 
-            const user =  User.findOneAndUpdate({user_id:orderEmailorId},{
+            const user = await  User.findOneAndUpdate({user_id:orderEmailorId},{
               password: hashedPassword,
               username: username,
               email: email,

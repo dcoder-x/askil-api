@@ -16,7 +16,7 @@ exports.webhook = async (req,res)=>{
            order_email:email
           });
           user.save(user)
-          res.status(200).json({msg:'recieved webhook',url:`https://askil.onrender.com/${id}`})
+          res.status(200).json({msg:'recieved webhook',url:`https://askil.onrender.com/view_profile/${id}`})
     } catch (error) {
         res.status(400).json({msg:'rejected webhook'})
     }
