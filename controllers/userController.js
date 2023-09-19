@@ -50,7 +50,9 @@ exports.createUser = async (req, res) => {
           if (password == verifyPassword) {
             const salt = await bcrypt.genSalt();
             const hashedPassword = await bcrypt.hash(password, salt);
-            const user = new User({
+
+
+            const user =  User.findOneAndUpdate({user_id:orderEmailorId},{
               password: hashedPassword,
               username: username,
               email: email,
@@ -64,7 +66,7 @@ exports.createUser = async (req, res) => {
                 expiresIn: "30m",
               });
               console.log("token ");
-              user.save(user);
+              // user.save(user);
   
               // sendVerificationEmail(email, token);
               return res
