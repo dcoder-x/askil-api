@@ -21,7 +21,7 @@ const UserSchema = new Schema({
   about: {type:String},
   phone: { type: String },
   workPhone: { type: String },
-  email: { type: String, unique: true },
+  email: { type: String, unique: true,default:`default${String(Math.random()* Date.now())}@gmail.com` },
   gender: { type: String },
   nationality: { type: String },
   avatar:{type:String},
