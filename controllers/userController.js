@@ -51,34 +51,42 @@ exports.createUser = async (req, res) => {
             const salt = await bcrypt.genSalt();
             const hashedPassword = await bcrypt.hash(password, salt);
 
+            if (idExists?.resgistered || orderEmailExists?.resgistered) {
+              res.status(400).json({
+                message: `user already exists with this ID`,
+              });
+            } else {
+              try {
 
-            const user = await  User.findOneAndUpdate({user_id:orderEmailorId},{
-              password: hashedPassword,
-              username: username,
-              email: email,
-              resgistered:true
-            });
-            console.log(user,'user')
-            try {
-              // const id = user?._id;
-              // const username = user.userName;
-              // console.log("saved");
-              // const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
-              //   expiresIn: "30m",
-              // });
-              // console.log("token ");
-              // user.save(user);
-  
-              // sendVerificationEmail(email, token);
-              return res
-                .status(201)
-                .json({ message: "user registered sucessfully", id: user._id });
-            } catch (error) {
-              console.log(error);
-              return res
-                .status(400)
-                .json({ message: "user could not be registered", error: error });
+                const user = await  User.findOneAndUpdate({user_id:orderEmailorId},{
+                  password: hashedPassword,
+                  username: username,
+                  email: email,
+                  resgistered:true
+                });
+                console.log(user,'user')
+                // const id = user?._id;
+                // const username = user.userName;
+                // console.log("saved");
+                // const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+                //   expiresIn: "30m",
+                // });
+                // console.log("token ");
+                // user.save(user);
+    
+                // sendVerificationEmail(email, token);
+                return res
+                  .status(201)
+                  .json({ message: "user registered sucessfully", id: user._id });
+              } catch (error) {
+                console.log(error);
+                return res
+                  .status(400)
+                  .json({ message: "user could not be registered", error: error });
+              }
             }
+
+
           } else {
             res.status(401).json({
               message: "password and confirm password field don't match",

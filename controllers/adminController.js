@@ -72,6 +72,7 @@ const adminSignIn = async (req, res) => {
     res.status(200).json({ message: "Admin signed in successfully", token });
   } catch (err) {
     // If there is an error, return error message
+    console.log(err,'error')
     res.status(500).json({ message: "Error signing in admin", err });
   }
 };
