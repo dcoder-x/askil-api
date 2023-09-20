@@ -35,7 +35,7 @@ exports.createUser = async (req, res) => {
         const usernameExist = await User.findOne({ username: username });
         const emailExist = await User.findOne({ email });
   
-        console.log(usernameExist, emailExist, "love");
+        console.log(idExists, "profile");
   
         if (usernameExist) {
           res.status(400).json({
@@ -58,6 +58,7 @@ exports.createUser = async (req, res) => {
               email: email,
               resgistered:true
             });
+            console.log(user,'user')
             try {
               // const id = user?._id;
               // const username = user.userName;
