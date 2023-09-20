@@ -1,8 +1,7 @@
 const Admin = require("../models/admin");
-const LoveQuestdb = require("../models/loveQuestdb");
-const { Userdb, registrationDb } = require("../models/userdb");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Users = require("../models/UsersModel");
 
 const adminSignup = async (req, res) => {
   const { firstName, lastName, userName, email, password, role } = req.body;
@@ -77,21 +76,16 @@ const adminSignIn = async (req, res) => {
   }
 };
 
-const adminGetAllLoveQuests = async (req, res) => {
-  try {
-    const LoveQuest = await LoveQuestdb.find();
-    res.status(200).json({ data: LoveQuest, msg: "request sucessful" });
-  } catch (error) {
-    res.status(400).json({ msg: "failed", error: error });
-  }
-};
 
+// const getAccounts = ()=>{
+
+// }
 const generateAllUsersGraphData = async (req, res) => {
   const { year } = req.params;
 
   try {
     // Query the database to get sales data for the specified year and seller
-    const usersData = await Userdb.aggregate([
+    const usersData = await Users.aggregate([
       {
         $match: {
           createdAt: {
@@ -146,7 +140,7 @@ const generateAllPremiumUsersGraphData = async (req, res) => {
 
   try {
     // Query the database to get sales data for the specified year and seller
-    const usersData = await Userdb.aggregate([
+    const usersData = await Users.aggregate([
       {
         $match: {
           isPremium:true,
@@ -202,8 +196,7 @@ const deleteAccount = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    await Userdb.findOneAndDelete({ registrationDataId: userId });
-    await registrationDb.findByIdAndDelete(userId);
+    await Users.findOneAndDelete({ _id: userId });
     return res.status(201).json({
       msg: "user deleted",
     });
@@ -220,7 +213,7 @@ const suspendAccount = async (req, res) => {
 
 
   try {
-    const user = await Userdb.findByIdAndUpdate(userId, {
+    const user = await Users.findByIdAndUpdate(userId, {
       $set: { isSuspended: true },
     });
     return res.status(201).json({
@@ -239,13 +232,29 @@ const banAccount = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    await Userdb.findByIdAndUpdate(userId, { $set: { isBanned: true } });
+    await Users.findByIdAndUpdate(userId, { $set: { isBanned: true } });
     return res.status(201).json({
       msg: "user banned",
     });
   } catch (error) {
     return res.status(500).json({
       msg: "something went wrong: account could not be banned",
+      error,
+    });
+  }
+};
+
+const markNfc = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    await Users.findByIdAndUpdate(userId, { $set: { nfc_linked: true } });
+    return res.status(201).json({
+      msg: "user url linked",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      msg: "something went wrong: account could not be marked",
       error,
     });
   }
@@ -259,14 +268,14 @@ const activateAccount = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const user = await Userdb.findById(userId);
+    const user = await Users.findById(userId);
     if (user.isBanned) {
-      await Userdb.findByIdAndUpdate(userId, { $set: { isBanned: false } });
+      await Users.findByIdAndUpdate(userId, { $set: { isBanned: false } });
       return res.status(201).json({
         msg: "user re-activated",
       });
     } else if (user.isSuspended) {
-      await Userdb.findByIdAndUpdate(userId, { $set: { isSuspended: false } });
+      await Users.findByIdAndUpdate(userId, { $set: { isSuspended: false } });
       return res.status(201).json({
         msg: "user re-activated",
       });
@@ -283,7 +292,6 @@ const activateAccount = async (req, res) => {
   }
 };
 module.exports = {
-  adminGetAllLoveQuests,
   activateAccount,
   banAccount,
   suspendAccount,
@@ -292,5 +300,6 @@ module.exports = {
   adminSignup,
   generateAllPremiumUsersGraphData,
   generateAllUsersGraphData,
-  verifyToken
+  verifyToken,
+  markNfc
 };

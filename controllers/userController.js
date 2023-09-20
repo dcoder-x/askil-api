@@ -59,13 +59,13 @@ exports.createUser = async (req, res) => {
               resgistered:true
             });
             try {
-              const id = user._id;
-              const username = user.userName;
-              console.log("saved");
-              const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
-                expiresIn: "30m",
-              });
-              console.log("token ");
+              // const id = user?._id;
+              // const username = user.userName;
+              // console.log("saved");
+              // const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+              //   expiresIn: "30m",
+              // });
+              // console.log("token ");
               // user.save(user);
   
               // sendVerificationEmail(email, token);

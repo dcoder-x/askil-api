@@ -34,10 +34,19 @@ const UserSchema = new Schema({
     organization:String,
     description:String
   },
+  user_url:String,
+  isBanned:{
+    type:Boolean,
+    default:false
+  },
   address:addressSchema,
   birthDate: { type: String },
-  isRestricted: { type: Boolean,default:false },
+  isSuspended: { type: Boolean,default:false },
   profileCreated:{type:Boolean,default:false},
+  nfc_linked:{
+    type:Boolean,
+    default:false
+  },
   links:[{
     name:String,
     link:String

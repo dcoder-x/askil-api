@@ -54,7 +54,46 @@ const auth = (req, res, next) => {
   }
 };
 
+const adminAuthMiddleware = async (req, res, next) => {
+  const authorization = req.headers.authorization;
+  if (!authorization) {
+    return res.status(401).json({
+      message: "No Authorization Header",
+    });
+  }
+  const token = authorization.split("Bearer ")[1];
 
+  try {
+    if (!token) {
+      return res.status(401).json({
+        message: "Invalid Token Format",
+      });
+    }
+    const decode = jwt.verify(token, process.env.JWT_ADMIN_SECRET);
+    console.log('admin token verified')
+    req.admin = decode;
+    next();
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({
+        message: "Session Expired",
+        error: error.message,
+      });
+    }
+    if (error instanceof jwt.JsonWebTokenError || error instanceof TokenError) {
+        console.log(process.env.SECRET_KEY)
+      return res.status(401).json({
+        message: "Invalid Token",
+        error: error.message,
+      });
+    }
+    res.status(500).json({
+      message: "Internal server Error",
+      error: error.message,
+      stack: error.stack,
+    });
+  }
+};
 
 
 async function   verifyUserEmail (req,res,next) {
@@ -93,4 +132,4 @@ async function   verifyUserEmail (req,res,next) {
   }
 }
 
-module.exports = { auth,verifyUserEmail};
+module.exports = { auth,verifyUserEmail,adminAuthMiddleware};

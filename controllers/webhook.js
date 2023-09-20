@@ -13,7 +13,8 @@ exports.webhook = async (req,res)=>{
     try {
         const user = new Users({
            user_id: String(id),
-           order_email:email
+           order_email:email,
+           user_url:`https://askil.onrender.com/view_profile/${id}`
           });
           user.save(user)
           res.status(200).json({msg:'recieved webhook',url:`https://askil.onrender.com/view_profile/${id}`})

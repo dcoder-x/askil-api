@@ -9,7 +9,7 @@ require("dotenv").config();
 // our routes
 const usersRouter = require("./routes/api/users");
 const addressRouter = require("./routes/api/address");
-const webhookRouter = require("./routes/api/webhook");
+const admin = require("./routes/api/admin");
 const bodyParser = require("body-parser");
 const { webhook } = require("./controllers/webhook");
 
@@ -47,7 +47,7 @@ let dbURI;
 // // serve static assets if in production (heroku configuration)
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
-  dbURI = process.env.DB_URI;
+  dbURI = process.env.LOCAL_DB_URI;
 }
 
 if (process.env.NODE_ENV == "production") {
@@ -64,7 +64,7 @@ mongoose.connect(dbURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-})
+});
 
 //test database connection
 let db = mongoose.connection;
@@ -76,8 +76,8 @@ db.once("open", function (con) {
 // Set up our main routes
 app.use("/api/users", usersRouter);
 app.use("/api/webhook", webhook);
+app.use("/api/admin", admin);
 app.use("/api/address", addressRouter);
-
 
 // if the request passes all the middleware without a response
 app.use((req, res, next) => {
@@ -92,7 +92,6 @@ app.use((error, req, res, next) => {
     message: error.response,
   });
 });
-
 
 // App's connection port
 const PORT = process.env.PORT || 4000;
