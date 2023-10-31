@@ -52,7 +52,7 @@ router.put("/delete_images/:imageId",auth, users_controller.deleteUserImage);
 // @route   GET api/users/user
 // @desc    Get user data
 // @access  private
-router.get("/user", auth, users_controller.getUser);
+router.get("/user",users_controller.getUser);
 
 // users_validation.validateLogin,
 // @route   GET api/users/user

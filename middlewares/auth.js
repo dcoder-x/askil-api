@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const { sendSellerVerificationEmail } = require("../utils/mailer");
 
 const jwtSecret = process.env.JWT_SECRET;
 
