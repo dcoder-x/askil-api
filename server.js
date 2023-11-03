@@ -47,7 +47,7 @@ let dbURI;
 // // serve static assets if in production (heroku configuration)
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
-  dbURI = process.env.LOCAL_DB_URI;
+  dbURI = process.env.DB_URI;
 }
 
 if (process.env.NODE_ENV == "production") {

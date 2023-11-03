@@ -214,6 +214,8 @@ exports.getUser = (req, res) => {
     .select("-password")
     .then((user) => res.status(200).json({ user: user, message: "user found" }))
     .catch((err) => {
+
+      console.log(err)
       res.status(500).json({ error: err, message: "user not found" });
     });
 };
